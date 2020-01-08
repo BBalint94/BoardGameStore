@@ -16,6 +16,22 @@ public class BoardGame {
     private double price;
     private int quantity;
 
+    public BoardGame(String id, String name,
+                     int fromNumPlayers, int toNumPlayers, int fromTime, int toTime,
+                     int suggestedAge, Collection<Category> categories,
+                     Collection<Mechanism> mechanisms, LocalDate releaseDate, double price) {
+        setId(id);
+        setName(name);
+        setPlayers(fromNumPlayers, toNumPlayers);
+        setPlayTime(fromTime,toTime);
+        setSuggestedAge(suggestedAge);
+        setCategories(categories);
+        setMechanisms(mechanisms);
+        setReleaseDate(releaseDate);
+        setPrice(price);
+        setQuantity(0);
+    }
+
     public String getId() {
         return id;
     }
@@ -36,7 +52,8 @@ public class BoardGame {
         return players;
     }
 
-    public void setPlayers(int[] players) {
+    public void setPlayers(int from, int to) {
+        int[] players = new int[]{from,to};
         this.players = players;
     }
 
@@ -44,7 +61,8 @@ public class BoardGame {
         return playTime;
     }
 
-    public void setPlayTime(int[] playTime) {
+    public void setPlayTime(int from, int to) {
+        int[] playTime = new int[]{from,to};
         this.playTime = playTime;
     }
 
