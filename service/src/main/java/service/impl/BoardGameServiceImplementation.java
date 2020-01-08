@@ -18,7 +18,7 @@ public class BoardGameServiceImplementation implements BoardGameService {
         return dao.readAllBoardGame();
     }
 
-    public BoardGame getBoardGame(int id) {
+    public BoardGame getBoardGame(String id) {
         return dao.readBoardGameById(id);
     }
 
@@ -34,7 +34,7 @@ public class BoardGameServiceImplementation implements BoardGameService {
         dao.deleteBoardGame(boardGame);
     }
 
-    public void deleteBoardGame(int id) {
+    public void deleteBoardGame(String id) {
         BoardGame boardGame = dao.readBoardGameById(id);
         dao.deleteBoardGame(boardGame);
     }

@@ -1,5 +1,6 @@
 package dao;
 
+import boardgamestore.exception.NoMatchingID;
 import boardgamestore.model.BoardGame;
 
 import java.util.Collection;
@@ -10,5 +11,5 @@ public interface BoardGameDAO {
     Collection<BoardGame> readAllBoardGame();
     void updateBoardGame(BoardGame boardGame);
     void deleteBoardGame(BoardGame boardGame);
-    BoardGame readBoardGameById (int id);
+    BoardGame readBoardGameById (String id) throws NoMatchingID;
 }

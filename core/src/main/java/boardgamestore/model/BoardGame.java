@@ -57,12 +57,20 @@ public class BoardGame {
         this.players = players;
     }
 
+    public void setPlayers(int[] players){
+        this.players = players;
+    }
+
     public int[] getPlayTime() {
         return playTime;
     }
 
     public void setPlayTime(int from, int to) {
         int[] playTime = new int[]{from,to};
+        this.playTime = playTime;
+    }
+
+    public void setPlayTime(int[] playTime){
         this.playTime = playTime;
     }
 

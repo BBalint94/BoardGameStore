@@ -7,9 +7,9 @@ import java.util.Collection;
 public interface BoardGameService {
 
     Collection<BoardGame> listAllBoardGame();
-    BoardGame getBoardGame(int id);
+    BoardGame getBoardGame(String id);
     void addBoardGame(BoardGame boardGame);
     void updateBoardGame(BoardGame boardGame);
     void deleteBoardGame(BoardGame boardGame);
-    void deleteBoardGame(int id);
+    void deleteBoardGame(String id);
 }
