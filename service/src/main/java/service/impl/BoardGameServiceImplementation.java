@@ -1,5 +1,6 @@
 package service.impl;
 
+import boardgamestore.exception.NoMatchingID;
 import boardgamestore.model.BoardGame;
 import boardgamestore.service.BoardGameService;
 import dao.BoardGameDAO;
@@ -18,7 +19,7 @@ public class BoardGameServiceImplementation implements BoardGameService {
         return dao.readAllBoardGame();
     }
 
-    public BoardGame getBoardGame(String id) {
+    public BoardGame getBoardGame(String id) throws NoMatchingID {
         return dao.readBoardGameById(id);
     }
 
@@ -34,7 +35,7 @@ public class BoardGameServiceImplementation implements BoardGameService {
         dao.deleteBoardGame(boardGame);
     }
 
-    public void deleteBoardGame(String id) {
+    public void deleteBoardGame(String id) throws NoMatchingID {
         BoardGame boardGame = dao.readBoardGameById(id);
         dao.deleteBoardGame(boardGame);
     }
