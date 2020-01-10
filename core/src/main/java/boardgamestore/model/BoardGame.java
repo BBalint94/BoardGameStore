@@ -7,8 +7,8 @@ public class BoardGame {
 
     private String id;
     private String name;
-    private int[] players;
-    private int[] playTime;
+    private String players;
+    private String playTime;
     private int suggestedAge;
     private Collection<Category> categories;
     private Collection<Mechanism> mechanisms;
@@ -16,14 +16,18 @@ public class BoardGame {
     private double price;
     private int quantity;
 
+    public BoardGame(){
+
+    }
+
     public BoardGame(String id, String name,
-                     int fromNumPlayers, int toNumPlayers, int fromTime, int toTime,
+                     String players, String playTime,
                      int suggestedAge, Collection<Category> categories,
                      Collection<Mechanism> mechanisms, LocalDate releaseDate, double price) {
         setId(id);
         setName(name);
-        setPlayers(fromNumPlayers, toNumPlayers);
-        setPlayTime(fromTime,toTime);
+        setPlayers(players);
+        setPlayTime(playTime);
         setSuggestedAge(suggestedAge);
         setCategories(categories);
         setMechanisms(mechanisms);
@@ -48,29 +52,19 @@ public class BoardGame {
         this.name = name;
     }
 
-    public int[] getPlayers() {
+    public String getPlayers() {
         return players;
     }
 
-    public void setPlayers(int from, int to) {
-        int[] players = new int[]{from,to};
+    public void setPlayers(String players){
         this.players = players;
     }
 
-    public void setPlayers(int[] players){
-        this.players = players;
-    }
-
-    public int[] getPlayTime() {
+    public String getPlayTime() {
         return playTime;
     }
 
-    public void setPlayTime(int from, int to) {
-        int[] playTime = new int[]{from,to};
-        this.playTime = playTime;
-    }
-
-    public void setPlayTime(int[] playTime){
+    public void setPlayTime(String playTime){
         this.playTime = playTime;
     }
 
@@ -90,9 +84,7 @@ public class BoardGame {
         this.categories = categories;
     }
 
-    public Collection<Mechanism> getMechanisms() {
-        return mechanisms;
-    }
+    public Collection<Mechanism> getMechanisms() { return mechanisms; }
 
     public void setMechanisms(Collection<Mechanism> mechanisms) {
         this.mechanisms = mechanisms;

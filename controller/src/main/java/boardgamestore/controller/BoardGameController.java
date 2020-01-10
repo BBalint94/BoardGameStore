@@ -1,13 +1,11 @@
 package boardgamestore.controller;
 
 import boardgamestore.exception.NoMatchingID;
+import boardgamestore.model.BoardGame;
 import boardgamestore.service.BoardGameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class BoardGameController {
@@ -22,6 +20,20 @@ public class BoardGameController {
     @ResponseBody
     public String showBoardGameCount(){
         return String.valueOf(service.listAllBoardGame().size());
+    }
+
+    @RequestMapping(value = "/addBoardGame",method = RequestMethod.POST)
+    @ResponseBody
+    public String addBoardGame(@RequestBody BoardGame boardGame){
+        service.addBoardGame(boardGame);
+        return "New board game added: "+boardGame.getName()+ " ("+boardGame.getId()+")";
+    }
+
+    @RequestMapping(value = "/removeBoardGame",method = RequestMethod.DELETE)
+    @ResponseBody
+    public String removeBoardGame(@RequestBody BoardGame boardGame){
+        service.deleteBoardGame(boardGame);
+        return "Board game deleted: "+boardGame.getName()+" ("+boardGame.getId()+")";
     }
 
     @ExceptionHandler(NoMatchingID.class)
