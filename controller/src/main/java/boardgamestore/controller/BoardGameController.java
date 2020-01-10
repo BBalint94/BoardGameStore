@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+
 @Controller
 public class BoardGameController {
 
@@ -34,6 +36,18 @@ public class BoardGameController {
     public String removeBoardGame(@RequestBody BoardGame boardGame){
         service.deleteBoardGame(boardGame);
         return "Board game deleted: "+boardGame.getName()+" ("+boardGame.getId()+")";
+    }
+
+    @RequestMapping(value = "/boardGames",method = RequestMethod.GET)
+    @ResponseBody
+    public Collection<BoardGame> showAllBoardGame(){
+        return service.listAllBoardGame();
+    }
+
+    @RequestMapping(value = "/boardGame",method = RequestMethod.GET)
+    @ResponseBody
+    public BoardGame getBoardGameById(@RequestParam(required = false) String id) throws NoMatchingID {
+        return service.getBoardGame(id);
     }
 
     @ExceptionHandler(NoMatchingID.class)
