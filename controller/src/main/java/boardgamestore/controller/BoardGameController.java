@@ -4,6 +4,7 @@ import boardgamestore.exception.NoMatchingID;
 import boardgamestore.model.BoardGame;
 import boardgamestore.service.BoardGameService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,14 +25,14 @@ public class BoardGameController {
         return String.valueOf(service.listAllBoardGame().size());
     }
 
-    @RequestMapping(value = "/addBoardGame",method = RequestMethod.POST)
+    @RequestMapping(value = "/addBoardGame",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String addBoardGame(@RequestBody BoardGame boardGame){
         service.addBoardGame(boardGame);
         return "New board game added: "+boardGame.getName()+ " ("+boardGame.getId()+")";
     }
 
-    @RequestMapping(value = "/removeBoardGame",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/removeBoardGame",method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String removeBoardGame(@RequestBody BoardGame boardGame){
         service.deleteBoardGame(boardGame);
@@ -48,6 +49,12 @@ public class BoardGameController {
     @ResponseBody
     public BoardGame getBoardGameById(@RequestParam(required = false) String id) throws NoMatchingID {
         return service.getBoardGame(id);
+    }
+
+    @RequestMapping(value = "/boardGamesByName",method = RequestMethod.GET)
+    @ResponseBody
+    public Collection<BoardGame> getBoardGamesByName(@RequestParam(required = false) String name){
+        return service.listBoardGamesByName(name);
     }
 
     @ExceptionHandler(NoMatchingID.class)

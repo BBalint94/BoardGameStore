@@ -13,4 +13,5 @@ public interface BoardGameService {
     void updateBoardGame(BoardGame boardGame);
     void deleteBoardGame(BoardGame boardGame);
     void deleteBoardGame(String id) throws NoMatchingID;
+    Collection<BoardGame> listBoardGamesByName(String name);
 }

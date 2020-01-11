@@ -126,4 +126,17 @@ public class DAOJSON implements BoardGameDAO {
         }
         throw new NoMatchingID();
     }
+
+    @Override
+    public Collection<BoardGame> readBoardGamesByName(String name) {
+        Collection<BoardGame> boardGames = readAllBoardGame();
+        Collection<BoardGame> result = new ArrayList<BoardGame>();
+        for (BoardGame b : boardGames){
+            if(b.getName().toLowerCase().contains(name.toLowerCase())){
+                result.add(b);
+            }
+        }
+        return result;
+
+    }
 }

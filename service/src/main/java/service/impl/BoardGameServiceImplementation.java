@@ -23,6 +23,10 @@ public class BoardGameServiceImplementation implements BoardGameService {
         return dao.readBoardGameById(id);
     }
 
+    public Collection<BoardGame> listBoardGamesByName(String name) {
+        return dao.readBoardGamesByName(name);
+    }
+
     public void addBoardGame(BoardGame boardGame) {
         dao.createBoardGame(boardGame);
     }
