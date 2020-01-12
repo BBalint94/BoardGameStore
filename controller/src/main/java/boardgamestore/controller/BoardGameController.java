@@ -147,6 +147,15 @@ public class BoardGameController {
         return service.listComingSoonBoardGames();
     }
 
+    @RequestMapping(value = "/boardGamesByPlayers",method = RequestMethod.GET)
+    @ResponseBody
+    public Collection<BoardGame> getBoardGamesByPlayers(@RequestParam(required = false) String players) throws MissingParam {
+        if(players == null){
+            throw new MissingParam("players");
+        }
+        return service.listBoardGamesByPlayers(players);
+    }
+
     @RequestMapping(value = "/updateBoardGame",method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String updateBoardGame(@RequestBody(required = false) BoardGame boardGame) throws BoardGameNotExist, NoMatchingID {
@@ -179,5 +188,6 @@ public class BoardGameController {
         service.newPrice(id,price);
         return "Updated board game's price: $"+price+" ("+id+")";
     }
+
 
 }

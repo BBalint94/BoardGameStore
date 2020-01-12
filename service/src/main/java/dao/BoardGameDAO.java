@@ -12,5 +12,4 @@ public interface BoardGameDAO {
     void updateBoardGame(BoardGame boardGame) throws NoMatchingID, BoardGameNotExist;
     void deleteBoardGame(BoardGame boardGame) throws NoMatchingID;
     BoardGame readBoardGameById (String id) throws NoMatchingID;
-    Collection<BoardGame> readComingSoonBoardGames();
 }

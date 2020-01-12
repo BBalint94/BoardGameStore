@@ -17,6 +17,7 @@ public interface BoardGameService {
     void deleteBoardGame(BoardGame boardGame) throws NoMatchingID;
     void deleteBoardGame(String id) throws NoMatchingID;
     Collection<BoardGame> listBoardGamesByName(String name);
+    Collection<BoardGame> listBoardGamesByPlayers(String players);
     Collection<BoardGame> listBoardGamesBySuggestedAge(int age);
     Collection<BoardGame> listBoardGamesByCategories(Collection<String> categories) throws NotFoundCategory, MissingParam;
     Collection<BoardGame> listBoardGamesByMechanisms(Collection<String> mechanisms) throws NotFoundMechanism, MissingParam;

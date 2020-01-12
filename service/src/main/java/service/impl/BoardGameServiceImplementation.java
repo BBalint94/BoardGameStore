@@ -7,6 +7,7 @@ import boardgamestore.model.Mechanism;
 import boardgamestore.service.BoardGameService;
 import dao.BoardGameDAO;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -31,6 +32,18 @@ public class BoardGameServiceImplementation implements BoardGameService {
         Collection<BoardGame> result = new ArrayList<BoardGame>();
         for (BoardGame b : boardGames){
             if(b.getName().equalsIgnoreCase(name)){
+                result.add(b);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Collection<BoardGame> listBoardGamesByPlayers(String players) {
+        Collection<BoardGame> boardGames = listAllBoardGame();
+        Collection<BoardGame> result = new ArrayList<BoardGame>();
+        for (BoardGame b : boardGames){
+            if(b.getPlayers().equalsIgnoreCase(players)){
                 result.add(b);
             }
         }
@@ -129,7 +142,14 @@ public class BoardGameServiceImplementation implements BoardGameService {
     }
 
     public Collection<BoardGame> listComingSoonBoardGames() {
-        return dao.readComingSoonBoardGames();
+        Collection<BoardGame> boardGames = listAllBoardGame();
+        Collection<BoardGame> result = new ArrayList<BoardGame>();
+        for(BoardGame b : boardGames){
+            if(b.getReleaseDate().isAfter(LocalDate.now())){
+                result.add(b);
+            }
+        }
+        return result;
     }
 
     public void addBoardGame(BoardGame boardGame) throws AlreadyExist {

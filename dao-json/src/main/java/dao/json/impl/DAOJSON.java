@@ -2,8 +2,6 @@ package dao.json.impl;
 
 import boardgamestore.exception.*;
 import boardgamestore.model.BoardGame;
-import boardgamestore.model.Category;
-import boardgamestore.model.Mechanism;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +10,6 @@ import dao.BoardGameDAO;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.io.File;
@@ -141,17 +138,5 @@ public class DAOJSON implements BoardGameDAO {
             }
         }
         throw new NoMatchingID(id);
-    }
-
-    @Override
-    public Collection<BoardGame> readComingSoonBoardGames() {
-        Collection<BoardGame> boardGames = readAllBoardGame();
-        Collection<BoardGame> result = new ArrayList<BoardGame>();
-        for(BoardGame b : boardGames){
-            if(b.getReleaseDate().isAfter(LocalDate.now())){
-                result.add(b);
-            }
-        }
-        return result;
     }
 }
