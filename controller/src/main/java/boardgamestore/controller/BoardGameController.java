@@ -156,6 +156,28 @@ public class BoardGameController {
         return service.listBoardGamesByPlayers(players);
     }
 
+    @RequestMapping(value = "/boardGamesByPlayTime",method = RequestMethod.GET)
+    @ResponseBody
+    public Collection<BoardGame> getBoardGamesByPlayTime(@RequestParam(required = false) String playTime) throws MissingParam {
+        if(playTime == null){
+            throw new MissingParam("playTime");
+        }
+        return service.listBoardGamesByPlayTime(playTime);
+    }
+
+    @RequestMapping(value = "/boardGamesByPrice",method = RequestMethod.GET)
+    @ResponseBody
+    public Collection<BoardGame> getBoardGamesByPrice(@RequestParam(required = false) Double fromPrice,
+                                                      @RequestParam(required = false) Double toPrice) throws MissingParam {
+        if(fromPrice == null){
+            throw new MissingParam("fromPrice");
+        }
+        if(toPrice == null){
+            throw new MissingParam("toPrice");
+        }
+        return service.listBoardGameByPrice(fromPrice,toPrice);
+    }
+
     @RequestMapping(value = "/updateBoardGame",method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String updateBoardGame(@RequestBody(required = false) BoardGame boardGame) throws BoardGameNotExist, NoMatchingID {

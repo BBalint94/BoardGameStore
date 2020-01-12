@@ -50,11 +50,35 @@ public class BoardGameServiceImplementation implements BoardGameService {
         return result;
     }
 
+    @Override
+    public Collection<BoardGame> listBoardGamesByPlayTime(String playTime) {
+        Collection<BoardGame> boardGames = listAllBoardGame();
+        Collection<BoardGame> result = new ArrayList<BoardGame>();
+        for (BoardGame b : boardGames){
+            if(b.getPlayTime().equalsIgnoreCase(playTime)){
+                result.add(b);
+            }
+        }
+        return result;
+    }
+
     public Collection<BoardGame> listBoardGamesBySuggestedAge(int age) {
         Collection<BoardGame> boardGames = listAllBoardGame();
         Collection<BoardGame> result = new ArrayList<BoardGame>();
         for (BoardGame b : boardGames){
             if(b.getSuggestedAge() <= age){
+                result.add(b);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Collection<BoardGame> listBoardGameByPrice(double fromPrice, double toPrice) {
+        Collection<BoardGame> boardGames = listAllBoardGame();
+        Collection<BoardGame> result = new ArrayList<BoardGame>();
+        for (BoardGame b : boardGames){
+            if(b.getPrice() >= fromPrice && b.getPrice() <= toPrice){
                 result.add(b);
             }
         }
