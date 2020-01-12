@@ -6,6 +6,7 @@ import boardgamestore.model.Category;
 import boardgamestore.service.BoardGameService;
 import dao.BoardGameDAO;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class BoardGameServiceImplementation implements BoardGameService {
@@ -25,7 +26,14 @@ public class BoardGameServiceImplementation implements BoardGameService {
     }
 
     public Collection<BoardGame> listBoardGamesByName(String name) {
-        return dao.readBoardGamesByName(name);
+        Collection<BoardGame> boardGames = listAllBoardGame();
+        Collection<BoardGame> result = new ArrayList<BoardGame>();
+        for (BoardGame b : boardGames){
+            if(b.getName().equalsIgnoreCase(name)){
+                result.add(b);
+            }
+        }
+        return result;
     }
 
     public Collection<BoardGame> listBoardGamesBySuggestedAge(int age) {

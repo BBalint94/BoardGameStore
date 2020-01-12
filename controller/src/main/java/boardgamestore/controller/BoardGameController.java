@@ -2,11 +2,9 @@ package boardgamestore.controller;
 
 import boardgamestore.exception.*;
 import boardgamestore.model.BoardGame;
-import boardgamestore.model.Category;
 import boardgamestore.service.BoardGameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -97,13 +95,28 @@ public class BoardGameController {
 
     @RequestMapping(value = "/boardGame",method = RequestMethod.GET)
     @ResponseBody
-    public BoardGame getBoardGameById(@RequestParam(required = false) String id) throws NoMatchingID {
+    public BoardGame getBoardGameById(@RequestParam(required = false) String id) throws NoMatchingID, MissingParam {
+        if(id == null){
+            throw new MissingParam("id");
+        }
+        return service.getBoardGame(id);
+    }
+
+    @RequestMapping(value = "/boardGame/{id:[0-9a-fA-F]{8}\\\\-[0-9a-fA-F]{4}\\\\-[0-9a-fA-F]{4}\\\\-[0-9a-fA-F]{4}\\\\-[0-9a-fA-F]{12}}",method = RequestMethod.GET)
+    @ResponseBody
+    public BoardGame getBoardGame(@PathVariable() String id) throws NoMatchingID, MissingParam {
+        if(id == null){
+            throw new MissingParam("id");
+        }
         return service.getBoardGame(id);
     }
 
     @RequestMapping(value = "/boardGamesByName",method = RequestMethod.GET)
     @ResponseBody
-    public Collection<BoardGame> getBoardGamesByName(@RequestParam(required = false) String name){
+    public Collection<BoardGame> getBoardGamesByName(@RequestParam(required = false) String name) throws MissingParam {
+        if(name == null){
+            throw new MissingParam("name");
+        }
         return service.listBoardGamesByName(name);
     }
 

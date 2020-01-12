@@ -144,19 +144,6 @@ public class DAOJSON implements BoardGameDAO {
     }
 
     @Override
-    public Collection<BoardGame> readBoardGamesByName(String name) {
-        Collection<BoardGame> boardGames = readAllBoardGame();
-        Collection<BoardGame> result = new ArrayList<BoardGame>();
-        for (BoardGame b : boardGames){
-            if(b.getName().toLowerCase().contains(name.toLowerCase())){
-                result.add(b);
-            }
-        }
-        return result;
-
-    }
-
-    @Override
     public Collection<BoardGame> readBoardGamesBySuggestedAge(int age) {
         Collection<BoardGame> boardGames = readAllBoardGame();
         Collection<BoardGame> result = new ArrayList<BoardGame>();
