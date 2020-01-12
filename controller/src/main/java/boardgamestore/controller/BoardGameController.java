@@ -122,7 +122,10 @@ public class BoardGameController {
 
     @RequestMapping(value = "/boardGamesByAge",method = RequestMethod.GET)
     @ResponseBody
-    public Collection<BoardGame> getBoardGamesByAge(@RequestParam(required = false) int age){
+    public Collection<BoardGame> getBoardGamesByAge(@RequestParam(required = false) Integer age) throws MissingParam {
+        if(age == null){
+            throw new MissingParam("age");
+        }
         return service.listBoardGamesBySuggestedAge(age);
     }
 

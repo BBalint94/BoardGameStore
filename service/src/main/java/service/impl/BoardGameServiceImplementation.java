@@ -3,6 +3,7 @@ package service.impl;
 import boardgamestore.exception.*;
 import boardgamestore.model.BoardGame;
 import boardgamestore.model.Category;
+import boardgamestore.model.Mechanism;
 import boardgamestore.service.BoardGameService;
 import dao.BoardGameDAO;
 
@@ -37,15 +38,94 @@ public class BoardGameServiceImplementation implements BoardGameService {
     }
 
     public Collection<BoardGame> listBoardGamesBySuggestedAge(int age) {
-        return dao.readBoardGamesBySuggestedAge(age);
+        Collection<BoardGame> boardGames = listAllBoardGame();
+        Collection<BoardGame> result = new ArrayList<BoardGame>();
+        for (BoardGame b : boardGames){
+            if(b.getSuggestedAge() <= age){
+                result.add(b);
+            }
+        }
+        return result;
     }
 
     public Collection<BoardGame> listBoardGamesByCategories(Collection<String> categories) throws NotFoundCategory, MissingParam {
-        return dao.readBoardGamesByCategories(categories);
+        if(categories.size() == 0){
+            throw new MissingParam("category");
+        }
+        Collection<BoardGame> boardGames = listAllBoardGame();
+        Collection<BoardGame> result = new ArrayList<BoardGame>();
+        Category[] catArray = Category.values();
+        boolean containsCategory;
+        for(String c : categories){
+            if(c == null){
+                throw new MissingParam("category");
+            }
+            containsCategory = false;
+            for(int i=0;i<catArray.length;i++){
+                if(catArray[i].toString().equals(c)){
+                    containsCategory = true;
+                }
+            }
+            if(!containsCategory){
+                throw new NotFoundCategory(c);
+            }
+        }
+        boolean addToResult;
+        for (BoardGame b : boardGames) {
+            addToResult = false;
+            for (String c : categories) {
+                if (!b.getCategories().toString().contains(c)) {
+                    addToResult = false;
+                    break;
+                }else {
+                    addToResult = true;
+                }
+            }
+            if(addToResult){
+                result.add(b);
+            }
+        }
+        return result;
     }
 
     public Collection<BoardGame> listBoardGamesByMechanisms(Collection<String> mechanisms) throws NotFoundMechanism, MissingParam {
-        return dao.readBoardGamesByMechanisms(mechanisms);
+        if(mechanisms.size()==0){
+            throw new MissingParam("mechanism");
+        }
+        Collection<BoardGame> boardGames = listAllBoardGame();
+        Collection<BoardGame> result = new ArrayList<BoardGame>();
+        Mechanism[] mechArray = Mechanism.values();
+        boolean containsMechanism;
+        for (String m : mechanisms){
+            if(m == null){
+                throw new MissingParam("mechanism");
+            }
+            containsMechanism = false;
+            for(int i=0;i<mechArray.length;i++){
+                if(mechArray[i].toString().equals(m)){
+                    containsMechanism = true;
+                }
+            }
+            if(!containsMechanism){
+                throw new NotFoundMechanism(m);
+            }
+        }
+        boolean addToResult;
+        for (BoardGame b : boardGames){
+            addToResult = false;
+            for(String m : mechanisms){
+                if(!b.getMechanisms().toString().contains(m)){
+                    addToResult = false;
+                    break;
+                }else{
+                    addToResult = true;
+                }
+            }
+            if(addToResult){
+                result.add(b);
+            }
+        }
+        return result;
     }
 
     public Collection<BoardGame> listComingSoonBoardGames() {
