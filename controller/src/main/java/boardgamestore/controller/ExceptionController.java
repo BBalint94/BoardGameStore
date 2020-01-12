@@ -30,7 +30,11 @@ public class ExceptionController {
     @ResponseBody
     public String handlerAlreadyExist(Exception e){ return "Already exists: "+e.getMessage(); }
 
-    @ExceptionHandler(ObjectNotExist.class)
+    @ExceptionHandler(BoardGameNotExist.class)
     @ResponseBody
-    public String handlerObjectNotExist(Exception e){ return "Object not exist: "+e.getMessage(); }
+    public String handlerBoardGameNotExist(Exception e){ return "Board game not exist: "+e.getMessage(); }
+
+    @ExceptionHandler(CanNotBeNegativeNumber.class)
+    @ResponseBody
+    public String handlerCanNotBeNegativeNumber(Exception e){ return "Can not be negative number: "+e.getMessage(); }
 }

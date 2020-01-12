@@ -48,8 +48,44 @@ public class BoardGameServiceImplementation implements BoardGameService {
         dao.createBoardGame(boardGame);
     }
 
-    public void updateBoardGame(BoardGame boardGame) {
+    public void updateBoardGame(BoardGame boardGame) throws BoardGameNotExist, NoMatchingID {
         dao.updateBoardGame(boardGame);
+    }
+
+    public void increaseQuantity(String id, int quantity) throws BoardGameNotExist, NoMatchingID, CanNotBeNegativeNumber {
+        Collection<BoardGame> boardGames = listAllBoardGame();
+        if(quantity < 0){
+            throw new CanNotBeNegativeNumber("quantity ("+quantity+")");
+        }
+        BoardGame updated = null;
+        for(BoardGame b : boardGames){
+            if(b.getId().equalsIgnoreCase(id)){
+                updated = b;
+                updated.setQuantity(b.getQuantity()+quantity);
+            }
+        }
+        if(updated == null){
+            throw new NoMatchingID(id);
+        }
+        dao.updateBoardGame(updated);
+    }
+
+    public void newPrice(String id, double price) throws CanNotBeNegativeNumber, NoMatchingID, BoardGameNotExist {
+        Collection<BoardGame> boardGames = listAllBoardGame();
+        if(price < 0){
+            throw new CanNotBeNegativeNumber("price ("+price+")");
+        }
+        BoardGame updated = null;
+        for(BoardGame b : boardGames){
+            if(b.getId().equalsIgnoreCase(id)){
+                updated = b;
+                updated.setPrice(price);
+            }
+        }
+        if(updated == null){
+            throw new NoMatchingID(id);
+        }
+        dao.updateBoardGame(updated);
     }
 
     public void deleteBoardGame(BoardGame boardGame) throws NoMatchingID {

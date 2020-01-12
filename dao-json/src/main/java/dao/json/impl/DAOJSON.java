@@ -86,8 +86,9 @@ public class DAOJSON implements BoardGameDAO {
     }
 
     @Override
-    public void updateBoardGame(BoardGame boardGame) {
+    public void updateBoardGame(BoardGame boardGame) throws BoardGameNotExist {
         Collection<BoardGame> boardGames = readAllBoardGame();
+        boolean modify = false;
         for(BoardGame b : boardGames){
             if(b.getId().equalsIgnoreCase(boardGame.getId())){
                 b.setName(boardGame.getName());
@@ -99,7 +100,11 @@ public class DAOJSON implements BoardGameDAO {
                 b.setMechanisms(boardGame.getMechanisms());
                 b.setPrice(boardGame.getPrice());
                 b.setQuantity(boardGame.getQuantity());
+                modify = true;
             }
+        }
+        if(!modify){
+            throw new BoardGameNotExist(boardGame.getId());
         }
         try{
             mapper.writeValue(jsonFile,boardGames);
@@ -135,7 +140,7 @@ public class DAOJSON implements BoardGameDAO {
                 return b;
             }
         }
-        throw new NoMatchingID();
+        throw new NoMatchingID(id);
     }
 
     @Override

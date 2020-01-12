@@ -11,7 +11,9 @@ public interface BoardGameService {
     Collection<BoardGame> listAllBoardGame();
     BoardGame getBoardGame(String id) throws NoMatchingID;
     void addBoardGame(BoardGame boardGame) throws AlreadyExist;
-    void updateBoardGame(BoardGame boardGame);
+    void updateBoardGame(BoardGame boardGame) throws BoardGameNotExist, NoMatchingID;
+    void increaseQuantity(String id, int quantity) throws BoardGameNotExist, NoMatchingID, CanNotBeNegativeNumber;
+    void newPrice(String id, double price) throws CanNotBeNegativeNumber, NoMatchingID, BoardGameNotExist;
     void deleteBoardGame(BoardGame boardGame) throws NoMatchingID;
     void deleteBoardGame(String id) throws NoMatchingID;
     Collection<BoardGame> listBoardGamesByName(String name);

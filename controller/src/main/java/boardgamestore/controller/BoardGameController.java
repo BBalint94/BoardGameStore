@@ -55,7 +55,7 @@ public class BoardGameController {
 
     @RequestMapping(value = "/removeBoardGame",method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String removeBoardGame(@RequestBody BoardGame boardGame) throws NoMatchingID, MissingParam {
+    public String removeBoardGame(@RequestBody(required = false) BoardGame boardGame) throws NoMatchingID, MissingParam {
         if(boardGame.getId() == null){
             throw new MissingParam("id");
         }else if(boardGame.getName() == null){
@@ -77,6 +77,16 @@ public class BoardGameController {
         }
         service.deleteBoardGame(boardGame);
         return "Board game deleted: "+boardGame.getName()+" ("+boardGame.getId()+")";
+    }
+
+    @RequestMapping(value = "/removeBoardGameById",method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String removeBoardGameById(@RequestBody(required = false) String id) throws NoMatchingID, MissingParam {
+        if(id == null){
+            throw new MissingParam("id");
+        }
+        service.deleteBoardGame(id);
+        return "Board game deleted: "+id;
     }
 
     @RequestMapping(value = "/boardGames",method = RequestMethod.GET)
@@ -119,6 +129,39 @@ public class BoardGameController {
     @ResponseBody
     public Collection<BoardGame> getComingSoonBoardGames(){
         return service.listComingSoonBoardGames();
+    }
+
+    @RequestMapping(value = "/updateBoardGame",method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String updateBoardGame(@RequestBody(required = false) BoardGame boardGame) throws BoardGameNotExist, NoMatchingID {
+        service.updateBoardGame(boardGame);
+        return "Board game updated: "+boardGame.getName()+" ("+boardGame.getId()+")";
+    }
+
+    @RequestMapping(value = "/increaseQuantity",method = RequestMethod.GET)
+    @ResponseBody
+    public String increaseQuantity(@RequestParam(required = false) String id, @RequestParam(required = false) Integer quantity) throws CanNotBeNegativeNumber, NoMatchingID, BoardGameNotExist, MissingParam {
+        if(id == null){
+            throw new MissingParam("id");
+        }
+        if(quantity == null){
+            throw new MissingParam("quantity");
+        }
+        service.increaseQuantity(id,quantity);
+        return "Increased board game ("+id+") quantity ("+quantity+")";
+    }
+
+    @RequestMapping(value = "/newPrice",method = RequestMethod.GET)
+    @ResponseBody
+    public String newPrice(@RequestParam(required = false) String id, @RequestParam(required = false) Double price) throws BoardGameNotExist, CanNotBeNegativeNumber, NoMatchingID, MissingParam {
+        if(id == null){
+            throw new MissingParam("id");
+        }
+        if(price == null){
+            throw new MissingParam("price");
+        }
+        service.newPrice(id,price);
+        return "Updated board game's price: $"+price+" ("+id+")";
     }
 
 }
