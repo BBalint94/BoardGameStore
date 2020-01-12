@@ -1,7 +1,9 @@
 package boardgamestore.controller;
 
 import boardgamestore.exception.NoMatchingID;
+import boardgamestore.exception.NotFoundCategory;
 import boardgamestore.model.BoardGame;
+import boardgamestore.model.Category;
 import boardgamestore.service.BoardGameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -57,9 +59,16 @@ public class BoardGameController {
         return service.listBoardGamesByName(name);
     }
 
-    @ExceptionHandler(NoMatchingID.class)
+    @RequestMapping(value = "/boardGamesByAge",method = RequestMethod.GET)
     @ResponseBody
-    public String handlerNoMatchingId(Exception e){
-        return "ID not found in the database: "+e.getMessage();
+    public Collection<BoardGame> getBoardGamesByAge(@RequestParam(required = false) int age){
+        return service.listBoardGamesBySuggestedAge(age);
     }
+
+    @RequestMapping(value = "/boardGamesByCategory",method = RequestMethod.GET)
+    @ResponseBody
+    public Collection<BoardGame> getBoardGamesByCategory(@RequestParam(required = false) Collection<String> category) throws NotFoundCategory {
+        return service.listBoardGamesByCategories(category);
+    }
+
 }

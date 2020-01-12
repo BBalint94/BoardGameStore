@@ -1,7 +1,9 @@
 package dao.json.impl;
 
 import boardgamestore.exception.NoMatchingID;
+import boardgamestore.exception.NotFoundCategory;
 import boardgamestore.model.BoardGame;
+import boardgamestore.model.Category;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -138,5 +140,45 @@ public class DAOJSON implements BoardGameDAO {
         }
         return result;
 
+    }
+
+    @Override
+    public Collection<BoardGame> readBoardGamesBySuggestedAge(int age) {
+        Collection<BoardGame> boardGames = readAllBoardGame();
+        Collection<BoardGame> result = new ArrayList<BoardGame>();
+        for (BoardGame b : boardGames){
+            if(b.getSuggestedAge() <= age){
+                result.add(b);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Collection<BoardGame> readBoardGamesByCategories(Collection<String> categories) throws NotFoundCategory {
+        Collection<BoardGame> boardGames = readAllBoardGame();
+        Collection<BoardGame> result = new ArrayList<BoardGame>();
+        Category[] catArray = Category.values();
+        boolean containsCategory;
+        for(String c : categories){
+            containsCategory = false;
+            System.out.println(categories.size());
+            for(int i=0;i<catArray.length;i++){
+                if(catArray[i].toString().equals(c)){
+                    containsCategory = true;
+                }
+            }
+            if(!containsCategory){
+                throw new NotFoundCategory(c);
+            }
+        }
+        for (BoardGame b : boardGames) {
+            for (String c : categories) {
+                if (b.getCategories().toString().contains(c)) {
+                    result.add(b);
+                }
+            }
+        }
+        return result;
     }
 }
