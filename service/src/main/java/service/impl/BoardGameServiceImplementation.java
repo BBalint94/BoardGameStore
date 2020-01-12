@@ -1,7 +1,6 @@
 package service.impl;
 
-import boardgamestore.exception.NoMatchingID;
-import boardgamestore.exception.NotFoundCategory;
+import boardgamestore.exception.*;
 import boardgamestore.model.BoardGame;
 import boardgamestore.model.Category;
 import boardgamestore.service.BoardGameService;
@@ -33,11 +32,19 @@ public class BoardGameServiceImplementation implements BoardGameService {
         return dao.readBoardGamesBySuggestedAge(age);
     }
 
-    public Collection<BoardGame> listBoardGamesByCategories(Collection<String> categories) throws NotFoundCategory {
+    public Collection<BoardGame> listBoardGamesByCategories(Collection<String> categories) throws NotFoundCategory, MissingParam {
         return dao.readBoardGamesByCategories(categories);
     }
 
-    public void addBoardGame(BoardGame boardGame) {
+    public Collection<BoardGame> listBoardGamesByMechanisms(Collection<String> mechanisms) throws NotFoundMechanism, MissingParam {
+        return dao.readBoardGamesByMechanisms(mechanisms);
+    }
+
+    public Collection<BoardGame> listComingSoonBoardGames() {
+        return dao.readComingSoonBoardGames();
+    }
+
+    public void addBoardGame(BoardGame boardGame) throws AlreadyExist {
         dao.createBoardGame(boardGame);
     }
 
@@ -45,7 +52,7 @@ public class BoardGameServiceImplementation implements BoardGameService {
         dao.updateBoardGame(boardGame);
     }
 
-    public void deleteBoardGame(BoardGame boardGame) {
+    public void deleteBoardGame(BoardGame boardGame) throws NoMatchingID {
         dao.deleteBoardGame(boardGame);
     }
 

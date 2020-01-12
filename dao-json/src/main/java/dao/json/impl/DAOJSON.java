@@ -1,9 +1,9 @@
 package dao.json.impl;
 
-import boardgamestore.exception.NoMatchingID;
-import boardgamestore.exception.NotFoundCategory;
+import boardgamestore.exception.*;
 import boardgamestore.model.BoardGame;
 import boardgamestore.model.Category;
+import boardgamestore.model.Mechanism;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +12,7 @@ import dao.BoardGameDAO;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.io.File;
@@ -56,8 +57,14 @@ public class DAOJSON implements BoardGameDAO {
     }
 
     @Override
-    public void createBoardGame(BoardGame boardGame) {
+    public void createBoardGame(BoardGame boardGame) throws AlreadyExist {
         Collection<BoardGame> boardGames = readAllBoardGame();
+        for(BoardGame b : boardGames){
+            if(b.getId().equalsIgnoreCase(boardGame.getId())){
+                System.out.println(b.getId()+" : "+boardGame.getId());
+                throw new AlreadyExist(b.getName()+" ("+b.getId()+")");
+            }
+        }
         boardGames.add(boardGame);
         try{
             mapper.writeValue(jsonFile,boardGames);
@@ -102,7 +109,7 @@ public class DAOJSON implements BoardGameDAO {
     }
 
     @Override
-    public void deleteBoardGame(BoardGame boardGame) {
+    public void deleteBoardGame(BoardGame boardGame) throws NoMatchingID {
         Collection<BoardGame> boardGames = readAllBoardGame();
         Collection<BoardGame> result = new ArrayList<BoardGame>();
         try{
@@ -113,7 +120,9 @@ public class DAOJSON implements BoardGameDAO {
                 }
             }
             mapper.writeValue(jsonFile,result);
-        }catch (IOException | NoMatchingID e){
+        }catch (NoMatchingID noMatchingID){
+            throw new NoMatchingID(boardGame.getId());
+        }catch (IOException e){
             e.printStackTrace();
         }
     }
@@ -155,14 +164,19 @@ public class DAOJSON implements BoardGameDAO {
     }
 
     @Override
-    public Collection<BoardGame> readBoardGamesByCategories(Collection<String> categories) throws NotFoundCategory {
+    public Collection<BoardGame> readBoardGamesByCategories(Collection<String> categories) throws NotFoundCategory, MissingParam {
+        if(categories.size() == 0){
+            throw new MissingParam("category");
+        }
         Collection<BoardGame> boardGames = readAllBoardGame();
         Collection<BoardGame> result = new ArrayList<BoardGame>();
         Category[] catArray = Category.values();
         boolean containsCategory;
         for(String c : categories){
+            if(c.isEmpty()){
+                throw new MissingParam("category");
+            }
             containsCategory = false;
-            System.out.println(categories.size());
             for(int i=0;i<catArray.length;i++){
                 if(catArray[i].toString().equals(c)){
                     containsCategory = true;
@@ -172,11 +186,72 @@ public class DAOJSON implements BoardGameDAO {
                 throw new NotFoundCategory(c);
             }
         }
+        boolean addToResult;
         for (BoardGame b : boardGames) {
+            addToResult = false;
             for (String c : categories) {
-                if (b.getCategories().toString().contains(c)) {
-                    result.add(b);
+                if (!b.getCategories().toString().contains(c)) {
+                    addToResult = false;
+                    break;
+                }else {
+                    addToResult = true;
                 }
+            }
+            if(addToResult){
+                result.add(b);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Collection<BoardGame> readBoardGamesByMechanisms(Collection<String> mechanisms) throws NotFoundMechanism, MissingParam {
+        if(mechanisms.size()==0){
+            throw new MissingParam("mechanism");
+        }
+        Collection<BoardGame> boardGames = readAllBoardGame();
+        Collection<BoardGame> result = new ArrayList<BoardGame>();
+        Mechanism[] mechArray = Mechanism.values();
+        boolean containsMechanism;
+        for (String m : mechanisms){
+            if(m.isEmpty()){
+                throw new MissingParam("mechanism");
+            }
+            containsMechanism = false;
+            for(int i=0;i<mechArray.length;i++){
+                if(mechArray[i].toString().equals(m)){
+                    containsMechanism = true;
+                }
+            }
+            if(!containsMechanism){
+                throw new NotFoundMechanism(m);
+            }
+        }
+        boolean addToResult;
+        for (BoardGame b : boardGames){
+            addToResult = false;
+            for(String m : mechanisms){
+                if(!b.getMechanisms().toString().contains(m)){
+                    addToResult = false;
+                    break;
+                }else{
+                    addToResult = true;
+                }
+            }
+            if(addToResult){
+                result.add(b);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Collection<BoardGame> readComingSoonBoardGames() {
+        Collection<BoardGame> boardGames = readAllBoardGame();
+        Collection<BoardGame> result = new ArrayList<BoardGame>();
+        for(BoardGame b : boardGames){
+            if(b.getReleaseDate().isAfter(LocalDate.now())){
+                result.add(b);
             }
         }
         return result;
